@@ -20,11 +20,11 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        max-width: 600px;
-        width: 100%;
+        width: 90%; /* Width adjusted to be responsive */
+        max-width: 600px; /* Max width for larger screens */
     }
     select, button {
-        margin: 10px 5px;
+        margin: 10px 0;
         padding: 10px;
         font-size: 16px;
         border: none;
@@ -36,7 +36,7 @@
         color: white;
     }
     option.answered {
-        color: gray;
+        color: gray; /* Visual feedback for answered questions */
     }
     button {
         background-color: #FF9500;
@@ -56,7 +56,6 @@
         background-color: #777;
         border-radius: 5px;
         width: 100%;
-        position: relative;
     }
     #scoreIndicator {
         height: 100%;
@@ -76,14 +75,12 @@
     .yellow { background-color: #FFFF00; }
     .green { background-color: #008000; }
     @media (max-width: 600px) {
-        select, button {
-            margin: 5px 0;
-        }
-        body {
+        body, #decisionInputArea {
             flex-direction: column;
+            height: auto; /* Adjust height for smaller screens */
         }
-        #decisionInputArea {
-            padding: 10px;
+        select, button {
+            margin: 10px 0; /* Consistent margin for small screens */
         }
     }
 </style>
@@ -93,7 +90,7 @@
         <h1 style="color: white;">Calculadora de Decisão de Trabalho</h1>
         <div id="scoreMeter">
             <div id="scoreIndicator"></div>
-            <span id="scoreIcon" class="circle green"></span> <!-- Default to green, will change dynamically -->
+            <span id="scoreIcon" class="circle green"></span>
         </div>
         <select id="question">
             <option value="">Selecione a pergunta</option>
@@ -191,3 +188,4 @@
     </script>
 </body>
 </html>
+
