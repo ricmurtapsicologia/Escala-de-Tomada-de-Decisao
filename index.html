@@ -1,190 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-<meta charset="UTF-8">
-<title>Calculadora de Decisão de Trabalho</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #333;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        padding: 10px;
-    }
-    #decisionInputArea {
-        background-color: #4A4A4A;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        width: 90%; /* Width adjusted to be responsive */
-        max-width: 600px; /* Max width for larger screens */
-    }
-    select, button {
-        margin: 10px 0;
-        padding: 10px;
-        font-size: 16px;
-        border: none;
-        border-radius: 5px;
-        width: 100%;
-    }
-    select {
-        background-color: #555;
-        color: white;
-    }
-    option.answered {
-        color: gray; /* Visual feedback for answered questions */
-    }
-    button {
-        background-color: #FF9500;
-        color: white;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    button:hover {
-        background-color: #FFA500;
-    }
-    #totalScore, #decisionCutoff {
-        color: white;
-        margin-top: 20px;
-    }
-    #scoreMeter {
-        height: 20px;
-        background-color: #777;
-        border-radius: 5px;
-        width: 100%;
-    }
-    #scoreIndicator {
-        height: 100%;
-        background-color: #FF9500;
-        border-radius: 5px;
-        width: 0%;
-    }
-    .circle {
-        height: 12px;
-        width: 12px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-left: 5px;
-        vertical-align: middle;
-    }
-    .red { background-color: #FF0000; }
-    .yellow { background-color: #FFFF00; }
-    .green { background-color: #008000; }
-    @media (max-width: 600px) {
-        body, #decisionInputArea {
-            flex-direction: column;
-            height: auto; /* Adjust height for smaller screens */
-        }
-        select, button {
-            margin: 10px 0; /* Consistent margin for small screens */
-        }
-    }
-</style>
+	<meta charset="UTF-8">
+	<title>Calculadora de Decisão de Trabalho</title>
+	<style>
+		body {
+		    font-family: Arial, sans-serif;
+		    background-color: #333;
+		    color: white;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    height: 100vh;
+		    margin: 0;
+		    padding: 10px;
+		}
+		#decisionInputArea {
+		    background-color: #4A4A4A;
+		    padding: 20px;
+		    border-radius: 8px;
+		    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		    width: 90%; /* Width adjusted to be responsive */
+		    max-width: 600px; /* Max width for larger screens */
+		}
+		select, button {
+		    margin: 10px 0;
+		    padding: 10px;
+		    font-size: 16px;
+		    border: none;
+		    border-radius: 5px;
+		    width: 100%;
+		}
+		select {
+		    background-color: #555;
+		    color: white;
+		}
+		option.answered {
+		    color: gray; /* Visual feedback for answered questions */
+		}
+		button {
+		    background-color: #FF9500;
+		    color: white;
+		    cursor: pointer;
+		    font-weight: bold;
+		}
+		button:hover {
+		    background-color: #FFA500;
+		}
+		#totalScore, #decisionCutoff {
+		    color: white;
+		    margin-top: 20px;
+		}
+		#scoreMeter {
+		    height: 20px;
+		    background-color: #777;
+		    border-radius: 5px;
+		    width: 100%;
+		}
+		#scoreIndicator {
+		    height: 100%;
+		    background-color: #FF9500;
+		    border-radius: 5px;
+		    width: 0%;
+		}
+		.circle {
+		    height: 12px;
+		    width: 12px;
+		    border-radius: 50%;
+		    display: inline-block;
+		    margin-left: 5px;
+		    vertical-align: middle;
+		}
+		.red { background-color: #FF0000; }
+		.yellow { background-color: #FFFF00; }
+		.green { background-color: #008000; }
+		@media (max-width: 600px) {
+		    body, #decisionInputArea {
+		        flex-direction: column;
+		        height: auto; /* Adjust height for smaller screens */
+		    }
+		    select, button {
+		        margin: 10px 0; /* Consistent margin for small screens */
+		    }
+		}
+	</style>
 </head>
+
 <body>
-    <div id="decisionInputArea">
-        <h1 style="color: white;">Calculadora de Decisão de Trabalho</h1>
-        <div id="scoreMeter">
-            <div id="scoreIndicator"></div>
-            <span id="scoreIcon" class="circle green"></span>
-        </div>
-        <select id="question">
-            <option value="">Selecione a pergunta</option>
-            <!-- List of questions will be added dynamically -->
-        </select>
-        <select id="response">
-            <option value="">Escolha sua resposta</option>
-            <option value="1">1 - Discordo</option>
-            <option value="2">2 - Neutro</option>
-            <option value="3">3 - Concordo</option>
-        </select>
-        <button onclick="addDecision()">Adicionar Resposta</button>
-        <div id="totalScore">Total de Pontos: 0</div>
-        <div id="decisionCutoff">
-            <p><span class="circle red"></span> 15-25 pontos: Indica insatisfação significativa e uma possível necessidade de sair do trabalho.</p>
-            <p><span class="circle yellow"></span> 26-35 pontos: Sugere incerteza. Pode ser benéfico considerar ficar um tempo adicional para reavaliar ou preparar uma transição cuidadosa.</p>
-            <p><span class="circle green"></span> 36-45 pontos: Reflete satisfação e uma inclinação a permanecer no trabalho atual.</p>
-        </div>
-    </div>
-    <script>
-        let questions = [
-            { text: "1. Me sinto valorizado por minhas contribuições no trabalho atual.", type: "positive" },
-            { text: "2. A cultura do local de trabalho alinha-se com meus valores pessoais.", type: "positive" },
-            { text: "3. Tenho oportunidades de crescimento profissional aqui que me satisfazem.", type: "positive" },
-            { text: "4. Sinto-me emocionalmente drenado pelo meu trabalho mais frequentemente do que me sinto energizado.", type: "negative" },
-            { text: "5. Acredito que o ambiente de trabalho atual prejudica meu bem-estar mental.", type: "negative" },
-            { text: "6. Meu trabalho atual oferece um equilíbrio satisfatório entre vida profissional e pessoal.", type: "positive" },
-            { text: "7. Estou financeiramente estável o suficiente para considerar uma transição de carreira sem riscos significativos.", type: "positive" },
-            { text: "8. A segurança do meu emprego atual é uma razão importante para eu permanecer.", type: "positive" },
-            { text: "9. Sair do meu emprego atual me proporcionaria melhores oportunidades financeiras.", type: "negative" },
-            { text: "10. Meu relacionamento com colegas e superiores é positivo e contribui para minha satisfação no trabalho.", type: "positive" },
-            { text: "11. As condições de trabalho (horário, carga, localização) são adequadas para mim.", type: "positive" },
-            { text: "12. Percebo que há um suporte adequado e recursos para executar meu trabalho eficientemente.", type: "positive" },
-            { text: "13. Vejo-me trabalhando nesta empresa pelos próximos 5 anos.", type: "positive" },
-            { text: "14. Sinto que ficar mais um pouco no emprego atual pode abrir novas oportunidades de carreira para mim.", type: "positive" },
-            { text: "15. Sair do emprego atual agora pode impactar negativamente minha carreira a longo prazo.", type: "negative" }
-        ];
-        let decisions = new Array(questions.length).fill(null);
-
-        function loadQuestions() {
-            const questionSelect = document.getElementById('question');
-            questions.forEach((q, index) => {
-                let option = document.createElement('option');
-                option.value = index;
-                option.text = q.text;
-                questionSelect.appendChild(option);
-            });
-        }
-
-        function addDecision() {
-            const questionSelect = document.getElementById('question');
-            const questionIndex = parseInt(questionSelect.value);
-            const responseValue = parseInt(document.getElementById('response').value);
-            if (responseValue > 0 && decisions[questionIndex] === null) {
-                let adjustedScore = responseValue;
-                if (questions[questionIndex].type === "negative") {
-                    adjustedScore = 4 - responseValue; // Inverts score for negative questions
-                }
-                decisions[questionIndex] = adjustedScore;
-                updateScoreIndicator();
-                updateQuestionStatus(questionIndex);
-                questionSelect.options[questionIndex + 1].classList.add('answered'); // Mark question as answered
-                questionSelect.selectedIndex = 0; // Reset question selector
-                document.getElementById('response').selectedIndex = 0; // Reset response selector
-            } else {
-                alert('Por favor, selecione uma pergunta e forneça uma resposta.');
-            }
-        }
-
-        function updateQuestionStatus(index) {
-            const options = document.querySelectorAll('#question option');
-            options[index + 1].classList.add('answered');
-        }
-
-        function updateScoreIndicator() {
-            const totalScore = decisions.reduce((sum, num) => sum + (num || 0), 0);
-            const percentage = (totalScore / 45) * 100;
-            document.getElementById('scoreIndicator').style.width = `${percentage}%`;
-            document.getElementById('totalScore').innerHTML = `Total de Pontos: ${totalScore}`;
-            updateScoreIcon(totalScore);
-        }
-
-        function updateScoreIcon(score) {
-            const scoreIcon = document.getElementById('scoreIcon');
-            if (score <= 25) {
-                scoreIcon.className = "circle red"; // Red circle for low scores
-            } else if (score <= 35) {
-                scoreIcon.className = "circle yellow"; // Yellow circle for medium scores
-            } else {
-                scoreIcon.className = "circle green"; // Green circle for high scores
-            }
-        }
-
-        window.onload = loadQuestions;
-    </script>
+	<div id="decisionInputArea">
+		<h1 style="color: white;">Calculadora de Decisão de Trabalho</h1>
+		<div id="scoreMeter">
+			<div id="scoreIndicator"></div>
+			<span id="scoreIcon" class="circle green"></span>
+		</div>
+		<select id="question">
+			<option value="">Selecione a pergunta</option>
+			<!-- List of questions will be added dynamically -->
+		</select>
+		<select id="response">
+			<option value="">Escolha sua resposta</option>
+			<option value="1">1 - Discordo</option>
+			<option value="2">2 - Neutro</option>
+			<option value="3">3 - Concordo</option>
+		</select>
+		<button onclick="addDecision()">Adicionar Resposta</button>
+		<div id="totalScore">Total de Pontos: 0</div>
+		<div id="decisionCutoff">
+			<p><span class="circle red"></span> 15-25 pontos: Indica insatisfação significativa e uma possível necessidade de sair do trabalho.</p>
+			<p><span class="circle yellow"></span> 26-35 pontos: Sugere incerteza. Pode ser benéfico considerar ficar um tempo adicional para reavaliar ou preparar uma transição cuidadosa.</p>
+			<p><span class="circle green"></span> 36-45 pontos: Reflete satisfação e uma inclinação a permanecer no trabalho atual.</p>
+		</div>
+	</div>
+	<script>
+		let questions = [
+		    { text: "1. Me sinto valorizado por minhas contribuições no trabalho atual.", type: "positive" },
+		    { text: "2. A cultura do local de trabalho alinha-se com meus valores pessoais.", type: "positive" },
+		    { text: "3. Tenho oportunidades de crescimento profissional aqui que me satisfazem.", type: "positive" },
+		    { text: "4. Sinto-me emocionalmente drenado pelo meu trabalho mais frequentemente do que me sinto energizado.", type: "negative" },
+		    { text: "5. Acredito que o ambiente de trabalho atual prejudica meu bem-estar mental.", type: "negative" },
+		    { text: "6. Meu trabalho atual oferece um equilíbrio satisfatório entre vida profissional e pessoal.", type: "positive" },
+		    { text: "7. Estou financeiramente estável o suficiente para considerar uma transição de carreira sem riscos significativos.", type: "positive" },
+		    { text: "8. A segurança do meu emprego atual é uma razão importante para eu permanecer.", type: "positive" },
+		    { text: "9. Sair do meu emprego atual me proporcionaria melhores oportunidades financeiras.", type: "negative" },
+		    { text: "10. Meu relacionamento com colegas e superiores é positivo e contribui para minha satisfação no trabalho.", type: "positive" },
+		    { text: "11. As condições de trabalho (horário, carga, localização) são adequadas para mim.", type: "positive" },
+		    { text: "12. Percebo que há um suporte adequado e recursos para executar meu trabalho eficientemente.", type: "positive" },
+		    { text: "13. Vejo-me trabalhando nesta empresa pelos próximos 5 anos.", type: "positive" },
+		    { text: "14. Sinto que ficar mais um pouco no emprego atual pode abrir novas oportunidades de carreira para mim.", type: "positive" },
+		    { text: "15. Sair do emprego atual agora pode impactar negativamente minha carreira a longo prazo.", type: "negative" }
+		];
+		let decisions = new Array(questions.length).fill(null);
+		
+		function loadQuestions() {
+		    const questionSelect = document.getElementById('question');
+		    questions.forEach((q, index) => {
+		        let option = document.createElement('option');
+		        option.value = index;
+		        option.text = q.text;
+		        questionSelect.appendChild(option);
+		    });
+		}
+		
+		function addDecision() {
+		    const questionSelect = document.getElementById('question');
+		    const questionIndex = parseInt(questionSelect.value);
+		    const responseValue = parseInt(document.getElementById('response').value);
+		    if (responseValue > 0 && decisions[questionIndex] === null) {
+		        let adjustedScore = responseValue;
+		        if (questions[questionIndex].type === "negative") {
+		            adjustedScore = 4 - responseValue; // Inverts score for negative questions
+		        }
+		        decisions[questionIndex] = adjustedScore;
+		        updateScoreIndicator();
+		        updateQuestionStatus(questionIndex);
+		        questionSelect.options[questionIndex + 1].classList.add('answered'); // Mark question as answered
+		        questionSelect.selectedIndex = 0; // Reset question selector
+		        document.getElementById('response').selectedIndex = 0; // Reset response selector
+		    } else {
+		        alert('Por favor, selecione uma pergunta e forneça uma resposta.');
+		    }
+		}
+		
+		function updateQuestionStatus(index) {
+		    const options = document.querySelectorAll('#question option');
+		    options[index + 1].classList.add('answered');
+		}
+		
+		function updateScoreIndicator() {
+		    const totalScore = decisions.reduce((sum, num) => sum + (num || 0), 0);
+		    const percentage = (totalScore / 45) * 100;
+		    document.getElementById('scoreIndicator').style.width = `${percentage}%`;
+		    document.getElementById('totalScore').innerHTML = `Total de Pontos: ${totalScore}`;
+		    updateScoreIcon(totalScore);
+		}
+		
+		function updateScoreIcon(score) {
+		    const scoreIcon = document.getElementById('scoreIcon');
+		    if (score <= 25) {
+		        scoreIcon.className = "circle red"; // Red circle for low scores
+		    } else if (score <= 35) {
+		        scoreIcon.className = "circle yellow"; // Yellow circle for medium scores
+		    } else {
+		        scoreIcon.className = "circle green"; // Green circle for high scores
+		    }
+		}
+		
+		window.onload = loadQuestions;
+	</script>
 </body>
+
 </html>
